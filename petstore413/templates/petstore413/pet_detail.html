@@ -1,0 +1,17 @@
+{% extends 'petstore413/base.html' %}
+{% block title %} Pet Detail {% endblock %}
+{% block content %}
+    <div class="card my-4">
+        <div class="card-body">
+        <h1 class="card-title">Pets Detail Page</h1>
+        <p class="card-text">{{ pet.name }}</p>
+        <p class="card-text">Breed : {{ pet.breed }}</p>
+        <p class="card-text">Description : {{ pet.description }}</p>
+        <p class="card-text">Age : {{ pet.age }}</p>
+            {% if pet.image %}
+            <img src="{{ pet.image.url }}" class="card-img-top" alt="{{ pet.name }}">
+            {% endif %}
+        
+        </div>
+    </div>
+{% endblock %}

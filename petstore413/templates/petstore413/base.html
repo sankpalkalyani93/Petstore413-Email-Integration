@@ -1,0 +1,40 @@
+{% load static %}
+<!doctype html>
+<html>
+    <head>
+        <title>Pet Store</title>
+        <!--<link rel="stylesheet" type="text/css" href="{% static 'petstore413/styles.css' %}"> -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <h1>Welcome to The Pet Store Project</h1>
+        <header class="bg-dark text-white py-3">
+            <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-dark">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'pet_list' %}">Pets</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'product_list' %}">Products</a></li>
+                </ul>
+            </nav>
+            <form class="form-inline my-2" method="get">
+                <input class="form-control mr-sm-2" type="search" name="query" placeholder="Search">
+                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            <div>
+        </header>
+
+        <main class="container my-4"> 
+            {% block content %} {% endblock %}
+        </main>
+
+        <footer class="bg-dark text-white py-3">
+            <div class="container text-center">
+                <p>&copy; 2024 Petstore by Batch-413 </p>
+            </div>
+        </footer>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@2.5.3/dist/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+</html>

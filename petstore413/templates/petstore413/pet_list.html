@@ -1,0 +1,10 @@
+{% extends 'petstore413/base.html' %}
+{% block title %} Pet List {% endblock %}
+{% block content %}
+        <h2 class="my-4">List of pets</h2>
+        <div class="list-group">
+        {% for pet in pets %}
+            <a href="{% url 'pet_detail' pet.pk %}" class="list-group-item list-group-item-action">{{pet.name}}</a>
+        {% endfor %}
+        </div>
+{% endblock %}
