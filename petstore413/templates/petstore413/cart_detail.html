@@ -1,0 +1,12 @@
+{% extends 'petstore413/base.html' %}
+{% block title %} MyCart {% endblock %}
+{% block content %}
+    <h2>Cart Details</h2>
+    <ul>
+        
+        {% for item in cart_items %}
+            <li> {{ item.get_item_name }} - {{ item.quantity }}</li>
+
+        {% endfor %}
+    </ul>
+{% endblock %}

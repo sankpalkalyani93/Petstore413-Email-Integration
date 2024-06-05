@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_object_or_404
-from . models import Pet, Product   
+from django.shortcuts import render, get_object_or_404, redirect
+from . models import Pet, Product, Cart, CartItem  
 from . forms import SearchForm
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def pet_list(request):
@@ -30,3 +31,24 @@ def product_list(request):
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
     return render(request, 'petstore413/product_detail.html', {'product': product})
+
+@login_required
+def add_to_cart(request, item_type, item_id):
+    user_cart, created = Cart.objects.get_or_create(user_id=request.user.id)
+    if item_type == 'pet':
+        item = get_object_or_404(Pet, id=item_id)
+        cart_item, created = CartItem.objects.get_or_create(cart=user_cart, pet=item)
+    else:
+        item = get_object_or_404(Product, id=item_id)
+        cart_item, created = CartItem.objects.get_or_create(cart=user_cart, product=item)
+
+    if not created:
+        cart_item.quantity += 1
+    cart_item.save()
+    return redirect('cart_detail')
+
+@login_required
+def cart_detail(request):
+    cart, created = Cart.objects.get_or_create(user_id=request.user.id)
+    cart_items = CartItem.objects.filter(cart=cart)    
+    return render(request, 'petstore413/cart_detail.html', {'cart_items': cart_items})

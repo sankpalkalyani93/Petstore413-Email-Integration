@@ -10,5 +10,5 @@
             {% if product.image %}
             <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
             {% endif %}
-        
+        <a href="{% url 'add_to_cart' 'product' product.id %}">Add To Cart</a>
 {% endblock %}
