@@ -32,6 +32,7 @@ def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
     return render(request, 'petstore413/product_detail.html', {'product': product})
 
+
 @login_required
 def add_to_cart(request, item_type, item_id):
     user_cart, created = Cart.objects.get_or_create(user_id=request.user.id)
@@ -50,5 +51,22 @@ def add_to_cart(request, item_type, item_id):
 @login_required
 def cart_detail(request):
     cart, created = Cart.objects.get_or_create(user_id=request.user.id)
-    cart_items = CartItem.objects.filter(cart=cart)    
-    return render(request, 'petstore413/cart_detail.html', {'cart_items': cart_items})
+    cart_items = CartItem.objects.filter(cart=cart) 
+    total = sum(item.total for item in cart_items)
+    print("total : ", total )
+    return render(request, 'petstore413/cart_detail.html', {'cart_items': cart_items, 'total': total})
+
+def increase_qunatity(request, item_id):
+    cart_item = get_object_or_404(CartItem, id=item_id)
+    cart_item.quantity += 1
+    cart_item.save()
+    return redirect('cart_detail')
+
+def decrease_quantity(request, item_id):
+    cart_item = get_object_or_404(CartItem, id=item_id)
+    if cart_item.quantity > 1:
+        cart_item.quantity -= 1
+        cart_item.save()
+    else:
+        cart_item.delete()
+    return redirect('cart_detail')

@@ -8,6 +8,7 @@ class Pet(models.Model):
     breed =  models.CharField(max_length=255)
     description = models.TextField()
     image = models.ImageField(upload_to='pets/', blank=True, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return f"{self.name}"
@@ -28,7 +29,7 @@ class Cart(models.Model):
         return f"Cart of {self.user.username}"
     
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
     pet = models.ForeignKey(Pet, null=True, blank=True, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, null=True, blank=True, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
@@ -40,3 +41,11 @@ class CartItem(models.Model):
         if self.pet:
             return self.pet.name
         return self.product.name
+    
+    @property
+    def total(self):
+        if self.product:
+            return self.product.price * self.quantity
+        if self.pet:
+            return self.pet.price * self.quantity
+        return 0
