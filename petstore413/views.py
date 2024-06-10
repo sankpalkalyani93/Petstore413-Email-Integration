@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from . models import Pet, Product, Cart, CartItem  
-from . forms import SearchForm
+from . models import Pet, Product, Cart, CartItem, OrderItems 
+from . forms import OrderCreateForm, SearchForm
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -70,3 +70,22 @@ def decrease_quantity(request, item_id):
     else:
         cart_item.delete()
     return redirect('cart_detail')
+
+def order_create(request):
+    cart = Cart.objects.get(id=1)
+    if request.method == 'POST':
+        form = OrderCreateForm(request.POST)
+        if form.is_valid():
+            order = form.save()
+            for item in cart.items.all():
+                OrderItems.objects.create(
+                    order = order,
+                    product = item.product,
+                    pet = item.pet,
+                    price = item.product.price if item.product else item.pet.price,
+                    quantity = item.quantity
+                )
+            return render(request, 'petstore413/order_created.html', {'order': order})
+    else : 
+        form = OrderCreateForm()
+    return render(request, 'petstore413/order_create.html', {'cart': cart, 'form': form})
