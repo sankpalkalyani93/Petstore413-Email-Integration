@@ -64,6 +64,7 @@ class Order(models.Model):
     def __str__(self):
         return f"Order {self.id}"
     
+    @property
     def total_cost(self):
         return sum(item.price for item in self.items.all())
 
